@@ -12,7 +12,7 @@ DROP TABLE Konsole;
 
 CREATE TABLE Konsole
 (
-    KonsoleNr           INTEGER PRIMARY KEY,
+    KonsoleNr           INTEGER GENERATED ALWAYS as IDENTITY(START WITH 1 INCREMENT BY 1) PRIMARY KEY,
     Marke               VARCHAR(100),
     Name                VARCHAR(100),
     Beschreibung        VARCHAR(100),
@@ -30,7 +30,7 @@ CREATE TABLE Kategorie
 
 CREATE TABLE Modell
 (
-    ModellNr    INTEGER PRIMARY KEY,
+    ModellNr    INTEGER GENERATED ALWAYS as IDENTITY(START WITH 1 INCREMENT BY 1) PRIMARY KEY,
     KonsoleNr   INTEGER,
     Seriennr    VARCHAR(20),
     Region      VARCHAR(50),
@@ -42,12 +42,11 @@ CREATE TABLE Modell
 
 CREATE TABLE Spiel
 (
-    SpielNr     INTEGER,
+    SpielNr     INTEGER GENERATED ALWAYS as IDENTITY(START WITH 1 INCREMENT BY 1) PRIMARY KEY ,
     KategorieID CHAR(5),
     Name        VARCHAR(100),
     Publisher   VARCHAR(100),
     ReleaseJahr INTEGER,
-    PRIMARY KEY (SpielNr),
     FOREIGN KEY (KategorieID) REFERENCES Kategorie (KategorieID)
 );
 
@@ -62,11 +61,9 @@ CREATE TABLE SpielKompatibel
 
 CREATE TABLE Zubehoer
 (
-    ZubehoerNr  INTEGER,
-    ModellNr    INTEGER,
+    ZubehoerNr  INTEGER GENERATED ALWAYS as IDENTITY(START WITH 1 INCREMENT BY 1) PRIMARY KEY ,
     Name        VARCHAR(100),
     KategorieID CHAR(10),
-    PRIMARY KEY (ZubehoerNr),
     FOREIGN KEY (KategorieID) REFERENCES Kategorie (KategorieID)
 );
 
@@ -81,7 +78,7 @@ CREATE TABLE ZubehoerKompatibel
 
 CREATE TABLE Lager
 (
-    LagerNr     INTEGER PRIMARY KEY,
+    LagerNr     INTEGER GENERATED ALWAYS as IDENTITY(START WITH 1 INCREMENT BY 1) PRIMARY KEY,
     SpielNr     INTEGER NULL,
     ModellNr    INTEGER NULL,
     ZubehoerNr  INTEGER NULL,
@@ -94,3 +91,4 @@ CREATE TABLE Lager
     FOREIGN KEY (ZubehoerNr) REFERENCES Zubehoer (ZubehoerNr)
 );
 
+INSERT INTO Konsole(Marke, Name, Beschreibung, RichardsRetroFaktor, Anmkerkung) VALUES ('Nintendo', 'GameCube', 'stationäre Spielkonsole, Nachfolger des Nintendo 64, vorgänger der Wii', 2, NULL);
