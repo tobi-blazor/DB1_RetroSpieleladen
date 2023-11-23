@@ -15,9 +15,8 @@ CREATE TABLE Konsole
     KonsoleNr           INTEGER GENERATED ALWAYS as IDENTITY (START WITH 1 INCREMENT BY 1) PRIMARY KEY,
     Marke               VARCHAR(100),
     Name                VARCHAR(100),
-    Beschreibung        VARCHAR(100),
+    Beschreibung        VARCHAR(300),
     RichardsRetroFaktor NUMERIC(1) CHECK (RichardsRetroFaktor BETWEEN 0 AND 9),
-    Anmkerkung          VARCHAR(500)
 );
 
 CREATE TABLE Kategorie
@@ -30,13 +29,13 @@ CREATE TABLE Kategorie
 
 CREATE TABLE Modell
 (
-    ModellNr    INTEGER GENERATED ALWAYS as IDENTITY (START WITH 1 INCREMENT BY 1) PRIMARY KEY,
-    KonsoleNr   INTEGER,
-    Seriennr    VARCHAR(20),
-    Region      VARCHAR(50) CHECK (Region IN ('Europa', 'Nordamerika', 'Japan', 'Welt')),
-    ReleaseJahr INTEGER,
-    UVP         NUMERIC(7, 2) CHECK (UVP > 0),
-    Anmerkung   VARCHAR(500),
+    ModellNr     INTEGER GENERATED ALWAYS as IDENTITY (START WITH 1 INCREMENT BY 1) PRIMARY KEY,
+    KonsoleNr    INTEGER,
+    Seriennr     VARCHAR(20),
+    Region       VARCHAR(50) CHECK (Region IN ('Europa', 'Nordamerika', 'Japan', 'Welt')),
+    ReleaseJahr  INTEGER,
+    UVP          NUMERIC(7, 2) CHECK (UVP > 0),
+    Beschreibung VARCHAR(300),
     FOREIGN KEY (KonsoleNr) REFERENCES Konsole (KonsoleNr) ON DELETE CASCADE
 );
 
@@ -93,27 +92,27 @@ CREATE TABLE Lager
 
 
 --- Konsole/Modell
-INSERT INTO Konsole(Marke, Name, Beschreibung, RichardsRetroFaktor, Anmkerkung)
-VALUES ('Sony', 'PlayStation 2', 'auch bekannt als PS2', 8, NULL);
-INSERT INTO Modell(KonsoleNr, Seriennr, Region, ReleaseJahr, UVP, Anmerkung)
+INSERT INTO Konsole(Marke, Name, Beschreibung, RichardsRetroFaktor)
+VALUES ('Sony', 'PlayStation 2', 'auch bekannt als PS2', 8);
+INSERT INTO Modell(KonsoleNr, Seriennr, Region, ReleaseJahr, UVP, Beschreibung)
 VALUES (1, 'SCPH-18000', 'Japan', 2000, 300, NULL);
-INSERT INTO Modell(KonsoleNr, Seriennr, Region, ReleaseJahr, UVP, Anmerkung)
+INSERT INTO Modell(KonsoleNr, Seriennr, Region, ReleaseJahr, UVP, Beschreibung)
 VALUES (1, 'SCPH-35004', 'Japan', 2000, 300, NULL);
 
-INSERT INTO Konsole(Marke, Name, Beschreibung, RichardsRetroFaktor, Anmkerkung)
-VALUES ('Nintendo', 'GameCube', 'stationäre Spielkonsole, Nachfolger des Nintendo 64, vorgänger der Wii', 7, NULL);
-INSERT INTO Modell(KonsoleNr, Seriennr, Region, ReleaseJahr, UVP, Anmerkung)
+INSERT INTO Konsole(Marke, Name, Beschreibung, RichardsRetroFaktor)
+VALUES ('Nintendo', 'GameCube', 'stationäre Spielkonsole, Nachfolger des Nintendo 64, vorgänger der Wii', 7);
+INSERT INTO Modell(KonsoleNr, Seriennr, Region, ReleaseJahr, UVP, Beschreibung)
 VALUES (2, 'DOL-001', 'Japan', 2001, 129.99, '4 controller ports, 2 memory, manche haben keinen 2. serial port');
-INSERT INTO Modell(KonsoleNr, Seriennr, Region, ReleaseJahr, UVP, Anmerkung)
+INSERT INTO Modell(KonsoleNr, Seriennr, Region, ReleaseJahr, UVP, Beschreibung)
 VALUES (2, 'DOL-101', 'Europa', 2004, 99.99, 'Kostenreduzierte Version');
 
-INSERT INTO Konsole(Marke, Name, Beschreibung, RichardsRetroFaktor, Anmkerkung)
-VALUES ('Sony', 'Playstation 1', 'stationäre Spielkonsole, auch PS1 genannt', 9, NULL);
-INSERT INTO Modell(KonsoleNr, Seriennr, Region, ReleaseJahr, UVP, Anmerkung)
+INSERT INTO Konsole(Marke, Name, Beschreibung, RichardsRetroFaktor)
+VALUES ('Sony', 'Playstation 1', 'stationäre Spielkonsole, auch PS1 genannt', 9);
+INSERT INTO Modell(KonsoleNr, Seriennr, Region, ReleaseJahr, UVP, Beschreibung)
 VALUES (3, 'SCPH-1000', 'Japan', 1994, 129.99, 'Erste PS1, hat S-Video Port');
-INSERT INTO Modell(KonsoleNr, Seriennr, Region, ReleaseJahr, UVP, Anmerkung)
+INSERT INTO Modell(KonsoleNr, Seriennr, Region, ReleaseJahr, UVP, Beschreibung)
 VALUES (3, 'SCPH-1001', 'Nordamerika', 1994, 129.99, 'erste NA PS1, hat keinen S-Video Port');
-INSERT INTO Modell(KonsoleNr, Seriennr, Region, ReleaseJahr, UVP, Anmerkung)
+INSERT INTO Modell(KonsoleNr, Seriennr, Region, ReleaseJahr, UVP, Beschreibung)
 VALUES (3, 'SCPH-5552', 'Japan', 1997, 129.99, 'bessere qualität, zeug gefixt');
 
 --- Kategorien
