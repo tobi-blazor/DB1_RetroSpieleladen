@@ -45,6 +45,8 @@ CREATE TABLE Spiel
     SpielNr     INTEGER,
     KategorieID CHAR(5),
     Name        VARCHAR(100),
+    Publisher   VARCHAR(100),
+    ReleaseJahr INTEGER,
     PRIMARY KEY (SpielNr),
     FOREIGN KEY (KategorieID) REFERENCES Kategorie (KategorieID)
 );
