@@ -16,7 +16,7 @@ CREATE TABLE Konsole
     Marke               VARCHAR(100),
     Name                VARCHAR(100),
     Beschreibung        VARCHAR(300),
-    RichardsRetroFaktor NUMERIC(1) CHECK (RichardsRetroFaktor BETWEEN 0 AND 9),
+    RichardsRetroFaktor NUMERIC(1) CHECK (RichardsRetroFaktor BETWEEN 0 AND 9)
 );
 
 CREATE TABLE Kategorie
