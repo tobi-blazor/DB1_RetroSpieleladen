@@ -13,16 +13,16 @@ DROP TABLE Konsole;
 CREATE TABLE Konsole
 (
     KonsoleNr           INTEGER GENERATED ALWAYS as IDENTITY (START WITH 1 INCREMENT BY 1) PRIMARY KEY,
-    Marke               VARCHAR(100),
-    Name                VARCHAR(100),
+    Marke               VARCHAR(100) NOT NULL,
+    Name                VARCHAR(100) NOT NULL,
     Beschreibung        VARCHAR(300),
     RichardsRetroFaktor NUMERIC(1) CHECK (RichardsRetroFaktor BETWEEN 0 AND 9)
 );
 
 CREATE TABLE Kategorie
 (
-    KategorieID     CHAR(5) PRIMARY KEY,
-    Bezeichnung     VARCHAR(50),
+    KategorieID     CHAR(5) PRIMARY KEY NOT NULL,
+    Bezeichnung     VARCHAR(50) NOT NULL,
     OberkategorieID CHAR(5),
     FOREIGN KEY (OberkategorieID) REFERENCES Kategorie (KategorieID) ON DELETE CASCADE
 );
@@ -30,11 +30,11 @@ CREATE TABLE Kategorie
 CREATE TABLE Modell
 (
     ModellNr     INTEGER GENERATED ALWAYS as IDENTITY (START WITH 1 INCREMENT BY 1) PRIMARY KEY,
-    KonsoleNr    INTEGER,
-    Seriennr     VARCHAR(20),
-    Region       VARCHAR(50) CHECK (Region IN ('Europa', 'Nordamerika', 'Japan', 'Welt')),
-    ReleaseJahr  INTEGER,
-    UVP          NUMERIC(7, 2) CHECK (UVP > 0),
+    KonsoleNr    INTEGER NOT NULL ,
+    Seriennr     VARCHAR(20) NOT NULL ,
+    Region       VARCHAR(50) CHECK (Region IN ('Europa', 'Nordamerika', 'Japan', 'Welt')) NOT NULL,
+    ReleaseJahr  INTEGER NOT NULL ,
+    UVP          NUMERIC(7, 2) CHECK (UVP > 0) NOT NULL ,
     Beschreibung VARCHAR(300),
     FOREIGN KEY (KonsoleNr) REFERENCES Konsole (KonsoleNr) ON DELETE CASCADE
 );
@@ -42,11 +42,11 @@ CREATE TABLE Modell
 CREATE TABLE Spiel
 (
     SpielNr     INTEGER GENERATED ALWAYS as IDENTITY (START WITH 1 INCREMENT BY 1) PRIMARY KEY,
-    KategorieID CHAR(5),
-    Name        VARCHAR(100),
-    Publisher   VARCHAR(100),
-    Region      VARCHAR(50) CHECK (Region IN ('Europa', 'Nordamerika', 'Japan', 'Welt')),
-    ReleaseJahr INTEGER CHECK (ReleaseJahr BETWEEN 0 AND 3000),
+    KategorieID CHAR(5) NOT NULL ,
+    Name        VARCHAR(100) NOT NULL ,
+    Publisher   VARCHAR(100) NOT NULL ,
+    Region      VARCHAR(50) CHECK (Region IN ('Europa', 'Nordamerika', 'Japan', 'Welt')) NOT NULL ,
+    ReleaseJahr INTEGER CHECK (ReleaseJahr BETWEEN 0 AND 3000) NOT NULL ,
     FOREIGN KEY (KategorieID) REFERENCES Kategorie (KategorieID) ON DELETE SET NULL
 );
 
@@ -62,8 +62,8 @@ CREATE TABLE SpielKompatibel
 CREATE TABLE Zubehoer
 (
     ZubehoerNr  INTEGER GENERATED ALWAYS as IDENTITY (START WITH 1 INCREMENT BY 1) PRIMARY KEY,
-    Name        VARCHAR(100),
-    KategorieID CHAR(5),
+    Name        VARCHAR(100) NOT NULL ,
+    KategorieID CHAR(5) NOT NULL ,
     FOREIGN KEY (KategorieID) REFERENCES Kategorie (KategorieID) ON DELETE SET NULL
 );
 
@@ -79,12 +79,12 @@ CREATE TABLE ZubehoerKompatibel
 CREATE TABLE Lager
 (
     LagerNr    INTEGER GENERATED ALWAYS as IDENTITY (START WITH 1 INCREMENT BY 1) PRIMARY KEY,
-    SpielNr    INTEGER NULL,
-    ModellNr   INTEGER NULL,
-    ZubehoerNr INTEGER NULL,
-    Zustand    VARCHAR(100),
-    Anzahl     INTEGER,
-    Preis      NUMERIC(7, 2) CHECK (Preis > 0),
+    SpielNr    INTEGER,
+    ModellNr   INTEGER,
+    ZubehoerNr INTEGER,
+    Zustand    VARCHAR(100) NOT NULL ,
+    Anzahl     INTEGER NOT NULL ,
+    Preis      NUMERIC(7, 2) CHECK (Preis > 0) NOT NULL ,
     FOREIGN KEY (SpielNr) REFERENCES Spiel (SpielNr) ON DELETE CASCADE,
     FOREIGN KEY (ModellNr) REFERENCES Modell (ModellNr) ON DELETE CASCADE,
     FOREIGN KEY (ZubehoerNr) REFERENCES Zubehoer (ZubehoerNr) ON DELETE CASCADE
