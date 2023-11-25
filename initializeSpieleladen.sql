@@ -131,14 +131,14 @@ INSERT INTO SpielKompatibel(KonsoleNr, SpielNr)
 VALUES (2, 3);
 
 --- Lager
-INSERT INTO Lager(SpielNr, ModellNr, ZubehoerNr, Zustand, Anzahl, Preis)
-VALUES (NULL, NULL, 1, 'Gut', 4, 9.99);
-INSERT INTO Lager(SpielNr, ModellNr, ZubehoerNr, Zustand, Anzahl, Preis)
-VALUES (1, NULL, NULL, 'Sehr Gut', 3, 14.99);
-INSERT INTO Lager(SpielNr, ModellNr, ZubehoerNr, Zustand, Anzahl, Preis)
-VALUES (NULL, 3, NULL, 'Exzellent', 1, 160.00);
-INSERT INTO Lager(SpielNr, ModellNr, ZubehoerNr, Zustand, Anzahl, Preis)
-VALUES (NULL, 3, NULL, 'Akzeptabel', 5, 79.99);
+INSERT INTO Lager(SpielNr, ModellNr, Zustand, Anzahl, Preis)
+VALUES (NULL, 1, 'Gut', 4, 9.99);
+INSERT INTO Lager(SpielNr, ModellNr, Zustand, Anzahl, Preis)
+VALUES (1, NULL, 'Sehr Gut', 3, 14.99);
+INSERT INTO Lager(SpielNr, ModellNr, Zustand, Anzahl, Preis)
+VALUES (NULL, 3, 'Exzellent', 1, 160.00);
+INSERT INTO Lager(SpielNr, ModellNr, Zustand, Anzahl, Preis)
+VALUES (NULL, 3, 'Akzeptabel', 5, 79.99);
 
 
 
