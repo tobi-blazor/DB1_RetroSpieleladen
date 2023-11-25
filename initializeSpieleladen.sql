@@ -2,8 +2,6 @@ ALTER SESSION SET NLS_DATE_FORMAT='DD.MM.YYYY';
 ALTER SESSION SET NLS_TIMESTAMP_FORMAT = 'DD.MM.YYYY HH24:MI:SS.FF';
 
 DROP TABLE Lager;
-DROP TABLE ZubehoerKompatibel;
-DROP TABLE Zubehoer;
 DROP TABLE SpielKompatibel;
 DROP TABLE Spiel;
 DROP TABLE Modell;
@@ -59,35 +57,20 @@ CREATE TABLE SpielKompatibel
     FOREIGN KEY (SpielNr) REFERENCES Spiel (SpielNr) ON DELETE CASCADE
 );
 
-CREATE TABLE Zubehoer
-(
-    ZubehoerNr  INTEGER GENERATED ALWAYS as IDENTITY (START WITH 1 INCREMENT BY 1) PRIMARY KEY,
-    Name        VARCHAR(100) NOT NULL ,
-    KategorieID CHAR(5) NOT NULL ,
-    FOREIGN KEY (KategorieID) REFERENCES Kategorie (KategorieID) ON DELETE SET NULL
-);
 
-CREATE TABLE ZubehoerKompatibel
-(
-    ZubehoerNr INTEGER,
-    ModellNr   INTEGER,
-    PRIMARY KEY (ZubehoerNr, ModellNr),
-    FOREIGN KEY (ZubehoerNr) REFERENCES Zubehoer (ZubehoerNr) ON DELETE CASCADE,
-    FOREIGN KEY (ModellNr) REFERENCES Modell (ModellNr) ON DELETE CASCADE
-);
+
+
 
 CREATE TABLE Lager
 (
     LagerNr    INTEGER GENERATED ALWAYS as IDENTITY (START WITH 1 INCREMENT BY 1) PRIMARY KEY,
     SpielNr    INTEGER,
     ModellNr   INTEGER,
-    ZubehoerNr INTEGER,
     Zustand    VARCHAR(100) NOT NULL ,
     Anzahl     INTEGER NOT NULL ,
     Preis      NUMERIC(7, 2) CHECK (Preis > 0) NOT NULL ,
     FOREIGN KEY (SpielNr) REFERENCES Spiel (SpielNr) ON DELETE CASCADE,
-    FOREIGN KEY (ModellNr) REFERENCES Modell (ModellNr) ON DELETE CASCADE,
-    FOREIGN KEY (ZubehoerNr) REFERENCES Zubehoer (ZubehoerNr) ON DELETE CASCADE
+    FOREIGN KEY (ModellNr) REFERENCES Modell (ModellNr) ON DELETE CASCADE
 );
 
 
@@ -131,24 +114,7 @@ VALUES ('RACE', 'Racing', 'SP');
 INSERT INTO Kategorie(KategorieID, Bezeichnung, OberkategorieID)
 VALUES ('LSIM', 'Lebenssimulation', 'SP');
 
---- Zubehör
-INSERT INTO Zubehoer(Name, KategorieID)
-VALUES ('Festplattenadapter', 'ADP');
-INSERT INTO ZubehoerKompatibel(ZubehoerNr, ModellNr)
-VALUES (1, 2); --- PS2
-INSERT INTO Zubehoer(Name, KategorieID)
-VALUES ('Wavebird-Controller', 'CNTRL');
-INSERT INTO ZubehoerKompatibel(ZubehoerNr, ModellNr)
-VALUES (2, 3); --- GameCube
-INSERT INTO ZubehoerKompatibel(ZubehoerNr, ModellNr)
-VALUES (2, 4); --- GameCube
-INSERT INTO Zubehoer(Name, KategorieID)
-VALUES ('DK Bongos', 'HW');
-INSERT INTO ZubehoerKompatibel(ZubehoerNr, ModellNr)
-VALUES (3, 3); --- GameCube
-INSERT INTO ZubehoerKompatibel(ZubehoerNr, ModellNr)
-VALUES (3, 4);
---- GameCube
+
 
 --- Spiele
 INSERT INTO Spiel(KategorieID, Name, Publisher, Region, ReleaseJahr)
