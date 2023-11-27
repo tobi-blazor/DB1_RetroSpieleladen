@@ -1,26 +1,34 @@
-ALTER SESSION SET NLS_DATE_FORMAT='DD.MM.YYYY';
-ALTER SESSION SET NLS_TIMESTAMP_FORMAT = 'DD.MM.YYYY HH24:MI:SS.FF';
+/*
+ * Retro-Videospielladen
+ * Richard Ruppel, Tobias Guido Bläser
+ */
 
-DROP TABLE Lager;
-DROP TABLE SpielKompatibel;
-DROP TABLE Spiel;
-DROP TABLE Modell;
-DROP TABLE Kategorie;
-DROP TABLE Konsole;
+--- Unreferenzierte Sequenzen löschen
+PURGE RECYCLEBIN ;
+
+--- Aufräumen: ALLE Relationen inkl Sequenzen löschen
+BEGIN
+    FOR i IN (SELECT ut.table_name
+              FROM USER_TABLES ut)
+        LOOP
+            EXECUTE IMMEDIATE 'DROP TABLE ' || i.table_name || ' CASCADE CONSTRAINTS PURGE ';
+        END LOOP;
+END;
+
 
 CREATE TABLE Konsole
 (
     KonsoleNr           INTEGER GENERATED ALWAYS as IDENTITY (START WITH 1 INCREMENT BY 1) PRIMARY KEY,
-    Marke               VARCHAR(100) NOT NULL,
-    Name                VARCHAR(100) NOT NULL,
+    Marke               VARCHAR(100)                                           NOT NULL,
+    Name                VARCHAR(100)                                           NOT NULL,
     Beschreibung        VARCHAR(300),
-    RichardsRetroFaktor NUMERIC(1) CHECK (RichardsRetroFaktor BETWEEN 0 AND 9)
+    RichardsRetroFaktor NUMERIC(1) CHECK (RichardsRetroFaktor BETWEEN 0 AND 9) NOT NULL
 );
 
 CREATE TABLE Kategorie
 (
     KategorieID     CHAR(5) PRIMARY KEY NOT NULL,
-    Bezeichnung     VARCHAR(50) NOT NULL,
+    Bezeichnung     VARCHAR(50)         NOT NULL,
     OberkategorieID CHAR(5),
     FOREIGN KEY (OberkategorieID) REFERENCES Kategorie (KategorieID) ON DELETE CASCADE
 );
@@ -28,11 +36,11 @@ CREATE TABLE Kategorie
 CREATE TABLE Modell
 (
     ModellNr     INTEGER GENERATED ALWAYS as IDENTITY (START WITH 1 INCREMENT BY 1) PRIMARY KEY,
-    KonsoleNr    INTEGER NOT NULL ,
-    Seriennr     VARCHAR(20) NOT NULL ,
-    Region       VARCHAR(50) CHECK (Region IN ('Europa', 'Nordamerika', 'Japan', 'Welt')) NOT NULL,
-    ReleaseJahr  INTEGER NOT NULL ,
-    UVP          NUMERIC(7, 2) CHECK (UVP > 0) NOT NULL ,
+    KonsoleNr    INTEGER                                           NOT NULL,
+    Seriennr     VARCHAR(20)                                       NOT NULL,
+    Region       VARCHAR(50)                                       NOT NULL,
+    ReleaseJahr  INTEGER CHECK (ReleaseJahr BETWEEN 1000 AND 3000) NOT NULL,
+    UVP          NUMERIC(7, 2) CHECK (UVP > 0)                     NOT NULL,
     Beschreibung VARCHAR(300),
     FOREIGN KEY (KonsoleNr) REFERENCES Konsole (KonsoleNr) ON DELETE CASCADE
 );
@@ -40,11 +48,11 @@ CREATE TABLE Modell
 CREATE TABLE Spiel
 (
     SpielNr     INTEGER GENERATED ALWAYS as IDENTITY (START WITH 1 INCREMENT BY 1) PRIMARY KEY,
-    KategorieID CHAR(5) NOT NULL ,
-    Name        VARCHAR(100) NOT NULL ,
-    Publisher   VARCHAR(100) NOT NULL ,
-    Region      VARCHAR(50) CHECK (Region IN ('Europa', 'Nordamerika', 'Japan', 'Welt')) NOT NULL ,
-    ReleaseJahr INTEGER CHECK (ReleaseJahr BETWEEN 0 AND 3000) NOT NULL ,
+    KategorieID CHAR(5)                                           NOT NULL,
+    Name        VARCHAR(100)                                      NOT NULL,
+    Publisher   VARCHAR(100)                                      NOT NULL,
+    Region      VARCHAR(50)                                       NOT NULL,
+    ReleaseJahr INTEGER CHECK (ReleaseJahr BETWEEN 1000 AND 3000) NOT NULL,
     FOREIGN KEY (KategorieID) REFERENCES Kategorie (KategorieID) ON DELETE SET NULL
 );
 
@@ -57,18 +65,14 @@ CREATE TABLE SpielKompatibel
     FOREIGN KEY (SpielNr) REFERENCES Spiel (SpielNr) ON DELETE CASCADE
 );
 
-
-
-
-
 CREATE TABLE Lager
 (
-    LagerNr    INTEGER GENERATED ALWAYS as IDENTITY (START WITH 1 INCREMENT BY 1) PRIMARY KEY,
-    SpielNr    INTEGER,
-    ModellNr   INTEGER,
-    Zustand    VARCHAR(100) NOT NULL ,
-    Anzahl     INTEGER NOT NULL ,
-    Preis      NUMERIC(7, 2) CHECK (Preis > 0) NOT NULL ,
+    LagerNr  INTEGER GENERATED ALWAYS as IDENTITY (START WITH 1 INCREMENT BY 1) PRIMARY KEY,
+    SpielNr  INTEGER,
+    ModellNr INTEGER,
+    Zustand  VARCHAR(100)                    NOT NULL,
+    Anzahl   INTEGER                         NOT NULL,
+    Preis    NUMERIC(7, 2) CHECK (Preis > 0) NOT NULL,
     FOREIGN KEY (SpielNr) REFERENCES Spiel (SpielNr) ON DELETE CASCADE,
     FOREIGN KEY (ModellNr) REFERENCES Modell (ModellNr) ON DELETE CASCADE
 );
@@ -102,19 +106,11 @@ VALUES (3, 'SCPH-5552', 'Japan', 1997, 129.99, 'bessere qualität, zeug gefixt')
 INSERT INTO Kategorie(KategorieID, Bezeichnung, OberkategorieID)
 VALUES ('SP', 'Spiel', NULL);
 INSERT INTO Kategorie(KategorieID, Bezeichnung, OberkategorieID)
-VALUES ('HW', 'Hardware', NULL);
-INSERT INTO Kategorie(KategorieID, Bezeichnung, OberkategorieID)
-VALUES ('ADP', 'Adapter', 'HW');
-INSERT INTO Kategorie(KategorieID, Bezeichnung, OberkategorieID)
-VALUES ('CNTRL', 'Controller', 'HW');
-INSERT INTO Kategorie(KategorieID, Bezeichnung, OberkategorieID)
 VALUES ('GSK', 'Geschick', 'SP');
 INSERT INTO Kategorie(KategorieID, Bezeichnung, OberkategorieID)
 VALUES ('RACE', 'Racing', 'SP');
 INSERT INTO Kategorie(KategorieID, Bezeichnung, OberkategorieID)
 VALUES ('LSIM', 'Lebenssimulation', 'SP');
-
-
 
 --- Spiele
 INSERT INTO Spiel(KategorieID, Name, Publisher, Region, ReleaseJahr)
@@ -139,7 +135,5 @@ INSERT INTO Lager(SpielNr, ModellNr, Zustand, Anzahl, Preis)
 VALUES (NULL, 3, 'Exzellent', 1, 160.00);
 INSERT INTO Lager(SpielNr, ModellNr, Zustand, Anzahl, Preis)
 VALUES (NULL, 3, 'Akzeptabel', 5, 79.99);
-
-
 
 COMMIT;
