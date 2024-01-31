@@ -28,3 +28,16 @@ CONNECT BY PRIOR KategorieID = OberkategorieID
 ORDER SIBLINGS BY KategorieID;
 
 INSERT INTO KATEGORIE(KATEGORIEID, BEZEICHNUNG, OBERKATEGORIEID) VALUES ('RAC1', 'race test', 'RACE')
+
+
+
+Kühlschrank(KNummer, Bestand)
+Käse(Käsenummer, Markenname)
+
+SELECT KNummer, Bestand, (SELECT Markenname
+                          FROM Käse
+                          WHERE Käsenummer = k.KNummer) AS Marke
+FROM Kühlschrank k
+
+SELECT 'true' FROM KONSOLE
+WHERE 0 EXISTS IN (1, 4 ,5)
