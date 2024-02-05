@@ -25,7 +25,6 @@ AS
     FROM aufgabe1c
     WHERE BESTELLSTATUS LIKE '%bestaetigt%'
     GROUP BY KUNDENNUMMER
-    HAVING COUNT(*) > 0
 
 
 CREATE VIEW ViewAufgabe_1a AS SELECT kundennummer, Nachname, Vorname, Anrede, Geburtsdatum, FLOOR ((SYSDATE - Geburtsdatum) /365) AS Lebensalter FROM Kunde WHERE Anrede='Frau' AND Ort='Maieskuel';
